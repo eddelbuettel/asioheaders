@@ -1,3 +1,13 @@
+2015-12-30  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Expanded, and explicitly mention Chris Kohlhoff
+
+	* .gitignore: Small but important correction to not exclude local/
+
+	* tests/simpleTests.R: Minimal test added
+
+	* inst/NEWS.Rd: Added
+
 2015-12-29  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/include/: Initial version based on asio-1.11.0
