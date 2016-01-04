@@ -3,8 +3,10 @@
 	* .Rbuildignore: No longer install inst/include/asio*
 
 	* configure: New File, installing asioHeaders.tar.gz as needed
+	* configure.win: Ditto
 
 	* DESCRIPTION: Copyright: GPL (>= 2) for the R package
+	* README.md: Ditto
 
 2015-12-30  Dirk Eddelbuettel  <edd@debian.org>
 
