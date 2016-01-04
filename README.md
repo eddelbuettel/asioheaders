@@ -34,6 +34,6 @@ can be used for bug reports or feature requests.
 
 Dirk Eddelbuettel
 
-## License
+### License
 
 This package is provided under the same license as Asio and Boost, the BSL-1.0
