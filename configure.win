@@ -7,7 +7,7 @@ cwd=$(pwd)
 cd inst
 mkdir include
 cd include
-"${R_SCRIPT}" -e 'download.file("https://github.com/eddelbuettel/asioheaders/raw/feature/non-headers-header-package/inst/include/asioHeaders.tar.gz", "asioHeaders.tar.gz", quiet = TRUE, mode = "wb")'
+"${R_SCRIPT}" -e 'download.file("https://github.com/eddelbuettel/asioheaders/raw/master/inst/include/asioHeaders.tar.gz", "asioHeaders.tar.gz", quiet = TRUE, mode = "wb")'
 tar xfz asioHeaders.tar.gz
 rm asioHeaders.tar.gz
 

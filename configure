@@ -16,7 +16,7 @@ download() {
 
 mkdir -p inst/include/
 cd inst/include
-download https://github.com/eddelbuettel/asioheaders/raw/feature/non-headers-header-package/inst/include/asioHeaders.tar.gz
+download https://github.com/eddelbuettel/asioheaders/raw/master/inst/include/asioHeaders.tar.gz
 tar xfz asioHeaders.tar.gz
 rm asioHeaders.tar.gz
 
