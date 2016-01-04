@@ -1,3 +1,11 @@
+2016-01-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .Rbuildignore: No longer install inst/include/asio*
+
+	* configure: New File, installing asioHeaders.tar.gz as needed
+
+	* DESCRIPTION: Copyright: GPL (>= 2) for the R package
+
 2015-12-30  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Expanded, and explicitly mention Chris Kohlhoff

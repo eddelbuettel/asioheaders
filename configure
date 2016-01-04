@@ -1,0 +1,20 @@
+#!/bin/bash
+
+## helper function to not rely on curl which at least on OS X fails to follow redirects
+download() {
+    url=${1}
+    ## sadly, for Travis we cannot rely on R as it lacks libcurl
+    libcurl=$(${R_HOME}/bin/Rscript -e 'cat(capabilities()[["libcurl"]])')
+    ## so when we have libcurl in R, use it -- else fall back to curl
+    if [ ${libcurl} == "TRUE" ]; then
+        file=$(basename ${url})
+        ${R_HOME}/bin/Rscript -e "download.file(\"${url}\", \"${file}\", quiet=TRUE, method='libcurl')"
+    else
+        curl -s -k -L -O ${url}
+    fi
+}
+
+cd inst/include
+download https://github.com/eddelbuettel/asioheaders/raw/feature/non-headers-header-package/inst/include/asioHeaders.tar.gz
+tar xvfz asioHeaders.tar.gz
+rm -v asioHeaders.tar.gz
