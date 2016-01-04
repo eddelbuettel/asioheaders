@@ -2,7 +2,7 @@ Package: AsioHeaders
 Type: Package
 Title: 'Asio' C++ Header Files
 Version: 1.11.0-1
-Date: 2015-12-30
+Date: 2016-01-04
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: 'Asio' is a cross-platform C++ library for network and low-level
@@ -12,5 +12,11 @@ Description: 'Asio' is a cross-platform C++ library for network and low-level
  'Asio' is also included in Boost but requires linking when used with
  Boost. Standalone it can be used header-only provided a recent-enough
  compiler. 'Asio' is written and maintained by Christopher M. Kohlhoff.
-License: BSL-1.0
+ 'Asio' is released under the 'Boost Software License', Version 1.0.
+ .
+ This package is a pure installer which downloads the actual 'Asio' headers
+ when it is built, and does not contain any 'Asio' content in its sources
+ when present on CRAN.  As such, this pure R package is released under the
+ GNU GPL, Version 2 or later.
+License: GPL (>= 2)
 BugReports: https://github.com/eddelbuettel/asioheaders/issues

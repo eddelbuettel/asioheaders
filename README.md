@@ -1,4 +1,4 @@
-## AsioHeaders [![Build Status](https://travis-ci.org/eddelbuettel/asioheaders.svg)](https://travis-ci.org/eddelbuettel/asioheaders) [![License](https://img.shields.io/badge/License-BSL--1.0-brightgreen.svg?style=flat)](http://www.boost.org/users/license.html) [![CRAN](http://www.r-pkg.org/badges/version/AsioHeaders)](http://cran.rstudio.com/package=AsioHeaders) [![Downloads](http://cranlogs.r-pkg.org/badges/AsioHeaders?color=brightgreen)](http://cran.rstudio.com/package=AsioHeaders)
+## AsioHeaders [![Build Status](https://travis-ci.org/eddelbuettel/asioheaders.svg)](https://travis-ci.org/eddelbuettel/asioheaders) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![License](https://img.shields.io/badge/License-BSL--1.0-brightgreen.svg?style=flat)](http://www.boost.org/users/license.html) [![CRAN](http://www.r-pkg.org/badges/version/AsioHeaders)](http://cran.rstudio.com/package=AsioHeaders) [![Downloads](http://cranlogs.r-pkg.org/badges/AsioHeaders?color=brightgreen)](http://cran.rstudio.com/package=AsioHeaders)
 
 Asio Headers for R
 
@@ -34,6 +34,7 @@ can be used for bug reports or feature requests.
 
 Dirk Eddelbuettel
 
-## License
+### License
 
-This package is provided under the same license as Asio and Boost, the BSL-1.0
+This package is provided under the GNU GPL (>= 2); the Asio headers are
+provided under the same license as Asio and Boost, the BSL-1.0
