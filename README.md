@@ -1,4 +1,4 @@
-## AsioHeaders [![Build Status](https://travis-ci.org/eddelbuettel/asioheaders.svg)](https://travis-ci.org/eddelbuettel/asioheaders) [![License](https://img.shields.io/badge/License-BSL--1.0-brightgreen.svg?style=flat)](http://www.boost.org/users/license.html) [![CRAN](http://www.r-pkg.org/badges/version/AsioHeaders)](http://cran.rstudio.com/package=AsioHeaders) [![Downloads](http://cranlogs.r-pkg.org/badges/AsioHeaders?color=brightgreen)](http://cran.rstudio.com/package=AsioHeaders)
+## AsioHeaders [![Build Status](https://travis-ci.org/eddelbuettel/asioheaders.svg)](https://travis-ci.org/eddelbuettel/asioheaders) [![License](https://img.shields.io/badge/license-BSL--1.0-brightgreen.svg?style=flat)](http://www.boost.org/users/license.html) [![CRAN](http://www.r-pkg.org/badges/version/AsioHeaders)](http://cran.rstudio.com/package=AsioHeaders) [![Downloads](http://cranlogs.r-pkg.org/badges/AsioHeaders?color=brightgreen)](http://cran.rstudio.com/package=AsioHeaders)
 
 Asio Headers for R
 
