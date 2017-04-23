@@ -1,3 +1,7 @@
+2017-04-23  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Switch to run.sh from maintained for R and Travis
+
 2016-01-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Release 1.11.0-1
