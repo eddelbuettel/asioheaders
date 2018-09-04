@@ -1,57 +1,60 @@
 //
-// ip/address_range_v4.hpp
+// ip/address_v6_range.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2015 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2018 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+//                         Oliver Kowalke (oliver dot kowalke at gmail dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IP_ADDRESS_RANGE_V4_HPP
-#define ASIO_IP_ADDRESS_RANGE_V4_HPP
+#ifndef ASIO_IP_ADDRESS_V6_RANGE_HPP
+#define ASIO_IP_ADDRESS_V6_RANGE_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include "asio/ip/address_iterator_v4.hpp"
+#include "asio/ip/address_v6_iterator.hpp"
 
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace ip {
 
-/// Represents a range of IPv4 addresses.
+template <typename> class basic_address_range;
+
+/// Represents a range of IPv6 addresses.
 /**
  * @par Thread Safety
  * @e Distinct @e objects: Safe.@n
  * @e Shared @e objects: Unsafe.
  */
-class address_range_v4
+template <> class basic_address_range<address_v6>
 {
 public:
   /// The type of an iterator that points into the range.
-  typedef address_iterator_v4 iterator;
+  typedef basic_address_iterator<address_v6> iterator;
 
   /// Construct an empty range.
-  address_range_v4() ASIO_NOEXCEPT
-    : begin_(address_v4()),
-      end_(address_v4())
+  basic_address_range() ASIO_NOEXCEPT
+    : begin_(address_v6()),
+      end_(address_v6())
   {
   }
 
   /// Construct an range that represents the given range of addresses.
-  explicit address_range_v4(const address_iterator_v4& first,
-      const address_iterator_v4& last) ASIO_NOEXCEPT
+  explicit basic_address_range(const iterator& first,
+      const iterator& last) ASIO_NOEXCEPT
     : begin_(first),
       end_(last)
   {
   }
 
   /// Copy constructor.
-  address_range_v4(const address_range_v4& other) ASIO_NOEXCEPT
+  basic_address_range(const basic_address_range& other) ASIO_NOEXCEPT
     : begin_(other.begin_),
       end_(other.end_)
   {
@@ -59,16 +62,16 @@ public:
 
 #if defined(ASIO_HAS_MOVE)
   /// Move constructor.
-  address_range_v4(address_range_v4&& other) ASIO_NOEXCEPT
-    : begin_(ASIO_MOVE_CAST(address_iterator_v4)(other.begin_)),
-      end_(ASIO_MOVE_CAST(address_iterator_v4)(other.end_))
+  basic_address_range(basic_address_range&& other) ASIO_NOEXCEPT
+    : begin_(ASIO_MOVE_CAST(iterator)(other.begin_)),
+      end_(ASIO_MOVE_CAST(iterator)(other.end_))
   {
   }
 #endif // defined(ASIO_HAS_MOVE)
 
   /// Assignment operator.
-  address_range_v4& operator=(
-      const address_range_v4& other) ASIO_NOEXCEPT
+  basic_address_range& operator=(
+      const basic_address_range& other) ASIO_NOEXCEPT
   {
     begin_ = other.begin_;
     end_ = other.end_;
@@ -77,11 +80,11 @@ public:
 
 #if defined(ASIO_HAS_MOVE)
   /// Move assignment operator.
-  address_range_v4& operator=(
-      address_range_v4&& other) ASIO_NOEXCEPT
+  basic_address_range& operator=(
+      basic_address_range&& other) ASIO_NOEXCEPT
   {
-    begin_ = ASIO_MOVE_CAST(address_iterator_v4)(other.begin_);
-    end_ = ASIO_MOVE_CAST(address_iterator_v4)(other.end_);
+    begin_ = ASIO_MOVE_CAST(iterator)(other.begin_);
+    end_ = ASIO_MOVE_CAST(iterator)(other.end_);
     return *this;
   }
 #endif // defined(ASIO_HAS_MOVE)
@@ -101,29 +104,26 @@ public:
   /// Determine whether the range is empty.
   bool empty() const ASIO_NOEXCEPT
   {
-    return size() == 0;
-  }
-
-  /// Return the size of the range.
-  std::size_t size() const ASIO_NOEXCEPT
-  {
-    return end_->to_ulong() - begin_->to_ulong();
+    return begin_ == end_;
   }
 
   /// Find an address in the range.
-  iterator find(const address_v4& addr) const ASIO_NOEXCEPT
+  iterator find(const address_v6& addr) const ASIO_NOEXCEPT
   {
     return addr >= *begin_ && addr < *end_ ? iterator(addr) : end_;
   }
 
 private:
-  address_iterator_v4 begin_;
-  address_iterator_v4 end_;
+  iterator begin_;
+  iterator end_;
 };
+
+/// Represents a range of IPv6 addresses.
+typedef basic_address_range<address_v6> address_v6_range;
 
 } // namespace ip
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_IP_ADDRESS_RANGE_V4_HPP
+#endif // ASIO_IP_ADDRESS_V6_RANGE_HPP
