@@ -1,15 +1,15 @@
 //
-// detail/win_iocp_io_service.hpp
+// detail/win_iocp_io_context.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2015 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2018 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_DETAIL_WIN_IOCP_IO_SERVICE_HPP
-#define ASIO_DETAIL_WIN_IOCP_IO_SERVICE_HPP
+#ifndef ASIO_DETAIL_WIN_IOCP_IO_CONTEXT_HPP
+#define ASIO_DETAIL_WIN_IOCP_IO_CONTEXT_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -40,18 +40,18 @@ namespace detail {
 
 class wait_op;
 
-class win_iocp_io_service
-  : public execution_context_service_base<win_iocp_io_service>,
+class win_iocp_io_context
+  : public execution_context_service_base<win_iocp_io_context>,
     public thread_context
 {
 public:
   // Constructor. Specifies a concurrency hint that is passed through to the
   // underlying I/O completion port.
-  ASIO_DECL win_iocp_io_service(asio::execution_context& ctx,
-      size_t concurrency_hint = 0);
+  ASIO_DECL win_iocp_io_context(asio::execution_context& ctx,
+      int concurrency_hint = -1);
 
   // Destroy all user-defined handler objects owned by the service.
-  ASIO_DECL void shutdown_service();
+  ASIO_DECL void shutdown();
 
   // Initialise the task. Nothing to do here.
   void init_task()
@@ -68,6 +68,9 @@ public:
   // Run until stopped or one operation is performed.
   ASIO_DECL size_t run_one(asio::error_code& ec);
 
+  // Run until timeout, interrupted, or one operation is performed.
+  ASIO_DECL size_t wait_one(long usec, asio::error_code& ec);
+
   // Poll for operations without blocking.
   ASIO_DECL size_t poll(asio::error_code& ec);
 
@@ -77,7 +80,7 @@ public:
   // Stop the event processing loop.
   ASIO_DECL void stop();
 
-  // Determine whether the io_service is stopped.
+  // Determine whether the io_context is stopped.
   bool stopped() const
   {
     return ::InterlockedExchangeAdd(&stopped_, 0) != 0;
@@ -148,8 +151,8 @@ public:
     post_immediate_completion(op, false);
   }
 
-  // Process unfinished operations as part of a shutdown_service operation.
-  // Assumes that work_started() was previously called for the operations.
+  // Process unfinished operations as part of a shutdown operation. Assumes
+  // that work_started() was previously called for the operations.
   ASIO_DECL void abandon_operations(op_queue<operation>& ops);
 
   // Called after starting an overlapped I/O operation that did not complete
@@ -197,6 +200,12 @@ public:
       typename timer_queue<Time_Traits>::per_timer_data& to,
       typename timer_queue<Time_Traits>::per_timer_data& from);
 
+  // Get the concurrency hint that was used to initialise the io_context.
+  int concurrency_hint() const
+  {
+    return concurrency_hint_;
+  }
+
 private:
 #if defined(WINVER) && (WINVER < 0x0500)
   typedef DWORD dword_ptr_t;
@@ -209,7 +218,7 @@ private:
   // Dequeues at most one operation from the I/O completion port, and then
   // executes it. Returns the number of operations that were dequeued (i.e.
   // either 0 or 1).
-  ASIO_DECL size_t do_one(bool block, asio::error_code& ec);
+  ASIO_DECL size_t do_one(DWORD msec, asio::error_code& ec);
 
   // Helper to calculate the GetQueuedCompletionStatus timeout.
   ASIO_DECL static DWORD get_gqcs_timeout();
@@ -299,6 +308,9 @@ private:
 
   // The operations that are ready to dispatch.
   op_queue<win_iocp_operation> completed_ops_;
+
+  // The concurrency hint used to initialise the io_context.
+  const int concurrency_hint_;
 };
 
 } // namespace detail
@@ -306,11 +318,11 @@ private:
 
 #include "asio/detail/pop_options.hpp"
 
-#include "asio/detail/impl/win_iocp_io_service.hpp"
+#include "asio/detail/impl/win_iocp_io_context.hpp"
 #if defined(ASIO_HEADER_ONLY)
-# include "asio/detail/impl/win_iocp_io_service.ipp"
+# include "asio/detail/impl/win_iocp_io_context.ipp"
 #endif // defined(ASIO_HEADER_ONLY)
 
 #endif // defined(ASIO_HAS_IOCP)
 
-#endif // ASIO_DETAIL_WIN_IOCP_IO_SERVICE_HPP
+#endif // ASIO_DETAIL_WIN_IOCP_IO_CONTEXT_HPP
