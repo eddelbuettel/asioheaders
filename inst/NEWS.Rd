@@ -3,6 +3,12 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/asioheaders/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/asioheaders/issues/#1}{##1}}
 
+\section{Changes in version 1.12.2-1 (2020-03-11)}{
+  \itemize{
+    \item Upgraded to Asio 1.12.2 (Dirk in \ghpr{4} fixing \ghit{3})
+  }
+}
+
 \section{Changes in version 1.12.1-1 (2018-09-10)}{
   \itemize{
     \item Upgraded to Asio 1.12.1 (Joe Cheng in \ghpr{2})

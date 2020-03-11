@@ -5,15 +5,15 @@ Asio Headers for R
 ### About
 
 This package provides [R](https://www.r-project.org) with access to
-[Asio](https://think-async.com/) header files.  [Asio](https://think-async.com/) 
+[Asio](https://think-async.com/Asio/) header files.  [Asio](https://think-async.com/Asio/) 
 provides a cross-platform C++ library for network and low-level I/O
 programming. It is also included in [Boost](https://www.boost.org/) -- but
 requires linking when used as part of [Boost](https://www.boost.org/). This
-standalone version of [Asio](https://think-async.com/) is a header-only C++ library
+standalone version of [Asio](https://think-async.com/Asio/) is a header-only C++ library
 which can be used without linking (just like our [BH](http://dirk.eddelbuettel.com/code/bh.html)
 package with parts of [Boost](https://www.boost.org/)).
 
-By providing the [Asio](https://think-async.com/) library in this package, we
+By providing the [Asio](https://think-async.com/Asio/) library in this package, we
 offer a more efficient distribution system for [CRAN](https://cran.r-project.org) 
 as replication of this code in the sources of other packages is avoided.
 

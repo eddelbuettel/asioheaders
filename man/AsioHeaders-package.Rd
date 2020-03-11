@@ -28,7 +28,7 @@
   Maintainer: Dirk Eddelbuettel <edd@debian.org>
 }
 \references{
-  http://think-async.com/
+  \url{https://think-async.com/Asio/}
 }
 \keyword{ package }
 \examples{
