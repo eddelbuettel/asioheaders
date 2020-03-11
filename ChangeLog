@@ -1,5 +1,7 @@
 2020-03-11  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Relase 1.12.2-1
+
 	* inst/include/asio*: Upgraded to Asio 1.12.2
 
 	* README.md: Updated URLs to think-async.com/Asio/
