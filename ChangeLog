@@ -1,3 +1,9 @@
+2020-03-15  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* NAMESPACE: Removed as not needed without R code
+
 2020-03-12  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Standardize header and badges
