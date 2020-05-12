@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/badge/license-BSL--1.0-brightgreen.svg?style=flat)](https://www.boost.org/users/license.html)
 [![CRAN](https://www.r-pkg.org/badges/version/AsioHeaders)](https://cran.r-project.org/package=AsioHeaders)
 [![Downloads](https://cranlogs.r-pkg.org/badges/AsioHeaders?color=brightgreen)](https://cran.r-project.org/package=AsioHeaders)
+[![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/asioheaders)](https://github.com/eddelbuettel/asioheaders)
 
 ### About
 
