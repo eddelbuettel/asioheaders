@@ -3,6 +3,13 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/asioheaders/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/asioheaders/issues/#1}{##1}}
 
+\section{Changes in version 1.16.1-1 (2020-06-28)}{
+  \itemize{
+    \item Upgraded to Asio 1.16.1 (Dirk in \ghpr{5}).
+    \item Updated README.md with standard set of badges
+  }
+}
+
 \section{Changes in version 1.12.2-1 (2020-03-11)}{
   \itemize{
     \item Upgraded to Asio 1.12.2 (Dirk in \ghpr{4} fixing \ghit{3})
