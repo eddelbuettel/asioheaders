@@ -25,6 +25,14 @@ To use it, simply add it to the `LinkingTo:` field in the `DESCRIPTION` field of
 package---and the R package infrastructure tools will then know how to set
 include flags correctly on all architectures supported by R.
 
+### Example
+
+The [RcppAsioExample](https://github.com/eddelbuettel/rcppasioexample)
+package provides a simple illustration and example of using this package. Use
+it to both assert your compiler and setup are working correctly, and possibly
+extend your work from.  Generally speaking, only a `LinkingTo: AsioHeaders`
+should be needed, plus on Windows only a very simply [link instruction in
+`src/Makevars.win`](https://github.com/eddelbuettel/rcppasioexample/blob/master/src/Makevars.win).
 
 ### See Also
 
