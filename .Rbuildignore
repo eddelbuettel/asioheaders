@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-.travis.yml
+\.travis.yml
 ^local
 ^unused
 .*\.tar\.gz$
+^\.github
