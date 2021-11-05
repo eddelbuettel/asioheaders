@@ -1,6 +1,5 @@
 ## AsioHeaders: Asio Headers for R
 
-[![Build Status](https://travis-ci.org/eddelbuettel/asioheaders.svg)](https://travis-ci.org/eddelbuettel/asioheaders)
 [![CI](https://github.com/eddelbuettel/asioheaders/workflows/ci/badge.svg)](https://github.com/eddelbuettel/asioheaders/actions?query=workflow%3Aci)
 [![License](https://img.shields.io/badge/license-BSL--1.0-brightgreen.svg?style=flat)](https://www.boost.org/users/license.html)
 [![CRAN](https://www.r-pkg.org/badges/version/AsioHeaders)](https://cran.r-project.org/package=AsioHeaders)
