@@ -2,7 +2,7 @@
 // posix/basic_descriptor.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2022 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -20,16 +20,21 @@
 #if defined(ASIO_HAS_POSIX_STREAM_DESCRIPTOR) \
   || defined(GENERATING_DOCUMENTATION)
 
+#include "asio/any_io_executor.hpp"
 #include "asio/async_result.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/io_object_impl.hpp"
 #include "asio/detail/non_const_lvalue.hpp"
-#include "asio/detail/reactive_descriptor_service.hpp"
 #include "asio/detail/throw_error.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
-#include "asio/executor.hpp"
 #include "asio/posix/descriptor_base.hpp"
+
+#if defined(ASIO_HAS_IO_URING_AS_DEFAULT)
+# include "asio/detail/io_uring_descriptor_service.hpp"
+#else // defined(ASIO_HAS_IO_URING_AS_DEFAULT)
+# include "asio/detail/reactive_descriptor_service.hpp"
+#endif // defined(ASIO_HAS_IO_URING_AS_DEFAULT)
 
 #if defined(ASIO_HAS_MOVE)
 # include <utility>
@@ -49,7 +54,7 @@ namespace posix {
  * @e Distinct @e objects: Safe.@n
  * @e Shared @e objects: Unsafe.
  */
-template <typename Executor = executor>
+template <typename Executor = any_io_executor>
 class basic_descriptor
   : public descriptor_base
 {
@@ -68,10 +73,13 @@ public:
   /// The native representation of a descriptor.
 #if defined(GENERATING_DOCUMENTATION)
   typedef implementation_defined native_handle_type;
-#else
+#elif defined(ASIO_HAS_IO_URING_AS_DEFAULT)
+  typedef detail::io_uring_descriptor_service::native_handle_type
+    native_handle_type;
+#else // defined(ASIO_HAS_IO_URING_AS_DEFAULT)
   typedef detail::reactive_descriptor_service::native_handle_type
     native_handle_type;
-#endif
+#endif // defined(ASIO_HAS_IO_URING_AS_DEFAULT)
 
   /// A descriptor is always the lowest layer.
   typedef basic_descriptor lowest_layer_type;
@@ -85,7 +93,7 @@ public:
    * descriptor.
    */
   explicit basic_descriptor(const executor_type& ex)
-    : impl_(ex)
+    : impl_(0, ex)
   {
   }
 
@@ -99,10 +107,11 @@ public:
    */
   template <typename ExecutionContext>
   explicit basic_descriptor(ExecutionContext& context,
-      typename enable_if<
-        is_convertible<ExecutionContext&, execution_context&>::value
-      >::type* = 0)
-    : impl_(context)
+      typename constraint<
+        is_convertible<ExecutionContext&, execution_context&>::value,
+        defaulted_constraint
+      >::type = defaulted_constraint())
+    : impl_(0, 0, context)
   {
   }
 
@@ -121,7 +130,7 @@ public:
    */
   basic_descriptor(const executor_type& ex,
       const native_handle_type& native_descriptor)
-    : impl_(ex)
+    : impl_(0, ex)
   {
     asio::error_code ec;
     impl_.get_service().assign(impl_.get_implementation(),
@@ -145,10 +154,10 @@ public:
   template <typename ExecutionContext>
   basic_descriptor(ExecutionContext& context,
       const native_handle_type& native_descriptor,
-      typename enable_if<
+      typename constraint<
         is_convertible<ExecutionContext&, execution_context&>::value
-      >::type* = 0)
-    : impl_(context)
+      >::type = 0)
+    : impl_(0, 0, context)
   {
     asio::error_code ec;
     impl_.get_service().assign(impl_.get_implementation(),
@@ -588,20 +597,27 @@ public:
   /// write, or to have pending error conditions.
   /**
    * This function is used to perform an asynchronous wait for a descriptor to
-   * enter a ready to read, write or error condition state.
+   * enter a ready to read, write or error condition state. It is an initiating
+   * function for an @ref asynchronous_operation, and always returns
+   * immediately.
    *
    * @param w Specifies the desired descriptor state.
    *
-   * @param handler The handler to be called when the wait operation completes.
-   * Copies will be made of the handler as required. The function signature of
-   * the handler must be:
+   * @param token The @ref completion_token that will be used to produce a
+   * completion handler, which will be called when the wait completes.
+   * Potential completion tokens include @ref use_future, @ref use_awaitable,
+   * @ref yield_context, or a function object with the correct completion
+   * signature. The function signature of the completion handler must be:
    * @code void handler(
-   *   const asio::error_code& error // Result of operation
+   *   const asio::error_code& error // Result of operation.
    * ); @endcode
    * Regardless of whether the asynchronous operation completes immediately or
-   * not, the handler will not be invoked from within this function. On
-   * immediate completion, invocation of the handler will be performed in a
+   * not, the completion handler will not be invoked from within this function.
+   * On immediate completion, invocation of the handler will be performed in a
    * manner equivalent to using asio::post().
+   *
+   * @par Completion Signature
+   * @code void(asio::error_code) @endcode
    *
    * @par Example
    * @code
@@ -621,18 +637,28 @@ public:
    *     asio::posix::stream_descriptor::wait_read,
    *     wait_handler);
    * @endcode
+   *
+   * @par Per-Operation Cancellation
+   * This asynchronous operation supports cancellation for the following
+   * asio::cancellation_type values:
+   *
+   * @li @c cancellation_type::terminal
+   *
+   * @li @c cancellation_type::partial
+   *
+   * @li @c cancellation_type::total
    */
   template <
       ASIO_COMPLETION_TOKEN_FOR(void (asio::error_code))
-        WaitHandler ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
-  ASIO_INITFN_AUTO_RESULT_TYPE(WaitHandler,
+        WaitToken ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
+  ASIO_INITFN_AUTO_RESULT_TYPE(WaitToken,
       void (asio::error_code))
   async_wait(wait_type w,
-      ASIO_MOVE_ARG(WaitHandler) handler
+      ASIO_MOVE_ARG(WaitToken) token
         ASIO_DEFAULT_COMPLETION_TOKEN(executor_type))
   {
-    return async_initiate<WaitHandler, void (asio::error_code)>(
-        initiate_async_wait(this), handler, w);
+    return async_initiate<WaitToken, void (asio::error_code)>(
+        initiate_async_wait(this), token, w);
   }
 
 protected:
@@ -646,7 +672,11 @@ protected:
   {
   }
 
+#if defined(ASIO_HAS_IO_URING_AS_DEFAULT)
+  detail::io_object_impl<detail::io_uring_descriptor_service, Executor> impl_;
+#else // defined(ASIO_HAS_IO_URING_AS_DEFAULT)
   detail::io_object_impl<detail::reactive_descriptor_service, Executor> impl_;
+#endif // defined(ASIO_HAS_IO_URING_AS_DEFAULT)
 
 private:
   // Disallow copying and assignment.
@@ -677,8 +707,8 @@ private:
 
       detail::non_const_lvalue<WaitHandler> handler2(handler);
       self_->impl_.get_service().async_wait(
-          self_->impl_.get_implementation(), w, handler2.value,
-          self_->impl_.get_implementation_executor());
+          self_->impl_.get_implementation(), w,
+          handler2.value, self_->impl_.get_executor());
     }
 
   private:
