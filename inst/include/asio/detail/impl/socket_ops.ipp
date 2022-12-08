@@ -2514,7 +2514,7 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
         && ((ipv6_address->s6_addr[1] & 0x0f) == 0x02));
     if ((!is_link_local && !is_multicast_link_local)
         || if_indextoname(static_cast<unsigned>(scope_id), if_name + 1) == 0)
-      sprintf(if_name + 1, "%lu", scope_id);
+      snprintf(if_name + 1, sizeof(if_name) - 1, "%lu", scope_id);
     strcat(dest, if_name);
   }
   return result;
@@ -3625,7 +3625,7 @@ inline asio::error_code getnameinfo_emulation(
 #if defined(ASIO_HAS_SECURE_RTL)
       sprintf_s(serv, servlen, "%u", ntohs(port));
 #else // defined(ASIO_HAS_SECURE_RTL)
-      sprintf(serv, "%u", ntohs(port));
+      snprintf(serv, servlen, "%u", ntohs(port));
 #endif // defined(ASIO_HAS_SECURE_RTL)
     }
     else
@@ -3648,7 +3648,7 @@ inline asio::error_code getnameinfo_emulation(
 #if defined(ASIO_HAS_SECURE_RTL)
         sprintf_s(serv, servlen, "%u", ntohs(port));
 #else // defined(ASIO_HAS_SECURE_RTL)
-        sprintf(serv, "%u", ntohs(port));
+        snprintf(serv, servlen, "%u", ntohs(port));
 #endif // defined(ASIO_HAS_SECURE_RTL)
       }
 #if defined(ASIO_HAS_PTHREADS)

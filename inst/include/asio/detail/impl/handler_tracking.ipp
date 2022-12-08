@@ -368,7 +368,7 @@ void handler_tracking::write_line(const char* format, ...)
 #if defined(ASIO_HAS_SECURE_RTL)
   int length = vsprintf_s(line, sizeof(line), format, args);
 #else // defined(ASIO_HAS_SECURE_RTL)
-  int length = vsprintf(line, format, args);
+  int length = vsnprintf(line, sizeof(line), format, args);
 #endif // defined(ASIO_HAS_SECURE_RTL)
 
   va_end(args);
