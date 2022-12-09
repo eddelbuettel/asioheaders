@@ -3,6 +3,13 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/asioheaders/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/asioheaders/issues/#1}{##1}}
 
+\section{Changes in version 1.22.1-2 (2022-12-07)}{
+  \itemize{
+    \item Switch a handful of upstream \code{(v)sprint} uses to
+    \code{(v)snprintf}.
+  }
+}
+
 \section{Changes in version 1.22.1-1 (2022-06-14)}{
   \itemize{
     \item Upgraded to Asio 1.22.1 (Dirk in \ghpr{7} fixing \ghit{6}).
