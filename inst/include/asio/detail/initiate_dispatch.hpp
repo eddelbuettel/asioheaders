@@ -1,15 +1,15 @@
 //
-// impl/dispatch.hpp
-// ~~~~~~~~~~~~~~~~~
+// detail/initiate_dispatch.hpp
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2022 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2023 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IMPL_DISPATCH_HPP
-#define ASIO_IMPL_DISPATCH_HPP
+#ifndef ASIO_DETAIL_INITIATE_DISPATCH_HPP
+#define ASIO_DETAIL_INITIATE_DISPATCH_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -49,12 +49,16 @@ public:
     typename associated_allocator<handler_t>::type alloc(
         (get_associated_allocator)(handler));
 
-    execution::execute(
-        asio::prefer(ex,
-          execution::blocking.possibly,
-          execution::allocator(alloc)),
+#if defined(ASIO_NO_DEPRECATED)
+    asio::prefer(ex, execution::allocator(alloc)).execute(
         asio::detail::bind_handler(
           ASIO_MOVE_CAST(CompletionHandler)(handler)));
+#else // defined(ASIO_NO_DEPRECATED)
+    execution::execute(
+        asio::prefer(ex, execution::allocator(alloc)),
+        asio::detail::bind_handler(
+          ASIO_MOVE_CAST(CompletionHandler)(handler)));
+#endif // defined(ASIO_NO_DEPRECATED)
   }
 
   template <typename CompletionHandler>
@@ -115,12 +119,16 @@ public:
     typename associated_allocator<handler_t>::type alloc(
         (get_associated_allocator)(handler));
 
-    execution::execute(
-        asio::prefer(ex_,
-          execution::blocking.possibly,
-          execution::allocator(alloc)),
+#if defined(ASIO_NO_DEPRECATED)
+    asio::prefer(ex_, execution::allocator(alloc)).execute(
         asio::detail::bind_handler(
           ASIO_MOVE_CAST(CompletionHandler)(handler)));
+#else // defined(ASIO_NO_DEPRECATED)
+    execution::execute(
+        asio::prefer(ex_, execution::allocator(alloc)),
+        asio::detail::bind_handler(
+          ASIO_MOVE_CAST(CompletionHandler)(handler)));
+#endif // defined(ASIO_NO_DEPRECATED)
   }
 
   template <typename CompletionHandler>
@@ -146,12 +154,16 @@ public:
     typename associated_allocator<handler_t>::type alloc(
         (get_associated_allocator)(handler));
 
-    execution::execute(
-        asio::prefer(ex_,
-          execution::blocking.possibly,
-          execution::allocator(alloc)),
+#if defined(ASIO_NO_DEPRECATED)
+    asio::prefer(ex_, execution::allocator(alloc)).execute(
         detail::work_dispatcher<handler_t, handler_ex_t>(
           ASIO_MOVE_CAST(CompletionHandler)(handler), handler_ex));
+#else // defined(ASIO_NO_DEPRECATED)
+    execution::execute(
+        asio::prefer(ex_, execution::allocator(alloc)),
+        detail::work_dispatcher<handler_t, handler_ex_t>(
+          ASIO_MOVE_CAST(CompletionHandler)(handler), handler_ex));
+#endif // defined(ASIO_NO_DEPRECATED)
   }
 
   template <typename CompletionHandler>
@@ -210,42 +222,8 @@ private:
 };
 
 } // namespace detail
-
-template <ASIO_COMPLETION_TOKEN_FOR(void()) NullaryToken>
-ASIO_INITFN_AUTO_RESULT_TYPE(NullaryToken, void()) dispatch(
-    ASIO_MOVE_ARG(NullaryToken) token)
-{
-  return async_initiate<NullaryToken, void()>(
-      detail::initiate_dispatch(), token);
-}
-
-template <typename Executor,
-    ASIO_COMPLETION_TOKEN_FOR(void()) NullaryToken>
-ASIO_INITFN_AUTO_RESULT_TYPE(NullaryToken, void()) dispatch(
-    const Executor& ex, ASIO_MOVE_ARG(NullaryToken) token,
-    typename constraint<
-      execution::is_executor<Executor>::value || is_executor<Executor>::value
-    >::type)
-{
-  return async_initiate<NullaryToken, void()>(
-      detail::initiate_dispatch_with_executor<Executor>(ex), token);
-}
-
-template <typename ExecutionContext,
-    ASIO_COMPLETION_TOKEN_FOR(void()) NullaryToken>
-inline ASIO_INITFN_AUTO_RESULT_TYPE(NullaryToken, void()) dispatch(
-    ExecutionContext& ctx, ASIO_MOVE_ARG(NullaryToken) token,
-    typename constraint<is_convertible<
-      ExecutionContext&, execution_context&>::value>::type)
-{
-  return async_initiate<NullaryToken, void()>(
-      detail::initiate_dispatch_with_executor<
-        typename ExecutionContext::executor_type>(
-          ctx.get_executor()), token);
-}
-
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_IMPL_DISPATCH_HPP
+#endif // ASIO_DETAIL_INITIATE_DISPATCH_HPP

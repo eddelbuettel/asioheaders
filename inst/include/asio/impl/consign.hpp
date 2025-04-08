@@ -1,15 +1,15 @@
 //
-// experimental/impl/prepend.hpp
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// impl/consign.hpp
+// ~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2022 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2023 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef ASIO_IMPL_EXPERIMENTAL_PREPEND_HPP
-#define ASIO_IMPL_EXPERIMENTAL_PREPEND_HPP
+#ifndef ASIO_IMPL_CONSIGN_HPP
+#define ASIO_IMPL_CONSIGN_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -23,23 +23,23 @@
 #include "asio/detail/handler_cont_helpers.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
 #include "asio/detail/type_traits.hpp"
+#include "asio/detail/utility.hpp"
 #include "asio/detail/variadic_templates.hpp"
 
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
-namespace experimental {
 namespace detail {
 
-// Class to adapt a prepend_t as a completion handler.
+// Class to adapt a consign_t as a completion handler.
 template <typename Handler, typename... Values>
-class prepend_handler
+class consign_handler
 {
 public:
   typedef void result_type;
 
   template <typename H>
-  prepend_handler(ASIO_MOVE_ARG(H) handler, std::tuple<Values...> values)
+  consign_handler(ASIO_MOVE_ARG(H) handler, std::tuple<Values...> values)
     : handler_(ASIO_MOVE_CAST(H)(handler)),
       values_(ASIO_MOVE_CAST(std::tuple<Values...>)(values))
   {
@@ -48,16 +48,7 @@ public:
   template <typename... Args>
   void operator()(ASIO_MOVE_ARG(Args)... args)
   {
-    this->invoke(
-        std::make_index_sequence<sizeof...(Values)>{},
-        ASIO_MOVE_CAST(Args)(args)...);
-  }
-
-  template <std::size_t... I, typename... Args>
-  void invoke(std::index_sequence<I...>, ASIO_MOVE_ARG(Args)... args)
-  {
     ASIO_MOVE_OR_LVALUE(Handler)(handler_)(
-        ASIO_MOVE_CAST(Values)(std::get<I>(values_))...,
         ASIO_MOVE_CAST(Args)(args)...);
   }
 
@@ -69,7 +60,7 @@ public:
 template <typename Handler>
 inline asio_handler_allocate_is_deprecated
 asio_handler_allocate(std::size_t size,
-    prepend_handler<Handler>* this_handler)
+    consign_handler<Handler>* this_handler)
 {
 #if defined(ASIO_NO_DEPRECATED)
   asio_handler_alloc_helpers::allocate(size, this_handler->handler_);
@@ -83,7 +74,7 @@ asio_handler_allocate(std::size_t size,
 template <typename Handler>
 inline asio_handler_deallocate_is_deprecated
 asio_handler_deallocate(void* pointer, std::size_t size,
-    prepend_handler<Handler>* this_handler)
+    consign_handler<Handler>* this_handler)
 {
   asio_handler_alloc_helpers::deallocate(
       pointer, size, this_handler->handler_);
@@ -94,16 +85,16 @@ asio_handler_deallocate(void* pointer, std::size_t size,
 
 template <typename Handler>
 inline bool asio_handler_is_continuation(
-    prepend_handler<Handler>* this_handler)
+    consign_handler<Handler>* this_handler)
 {
   return asio_handler_cont_helpers::is_continuation(
-        this_handler->handler_);
+      this_handler->handler_);
 }
 
 template <typename Function, typename Handler>
 inline asio_handler_invoke_is_deprecated
 asio_handler_invoke(Function& function,
-    prepend_handler<Handler>* this_handler)
+    consign_handler<Handler>* this_handler)
 {
   asio_handler_invoke_helpers::invoke(
       function, this_handler->handler_);
@@ -115,7 +106,7 @@ asio_handler_invoke(Function& function,
 template <typename Function, typename Handler>
 inline asio_handler_invoke_is_deprecated
 asio_handler_invoke(const Function& function,
-    prepend_handler<Handler>* this_handler)
+    consign_handler<Handler>* this_handler)
 {
   asio_handler_invoke_helpers::invoke(
       function, this_handler->handler_);
@@ -124,30 +115,15 @@ asio_handler_invoke(const Function& function,
 #endif // defined(ASIO_NO_DEPRECATED)
 }
 
-template <typename Signature, typename... Values>
-struct prepend_signature;
-
-template <typename R, typename... Args, typename... Values>
-struct prepend_signature<R(Args...), Values...>
-{
-  typedef R type(Values..., typename decay<Args>::type...);
-};
-
 } // namespace detail
-} // namespace experimental
 
 #if !defined(GENERATING_DOCUMENTATION)
 
-template <typename CompletionToken, typename... Values, typename Signature>
+template <typename CompletionToken, typename... Values, typename... Signatures>
 struct async_result<
-    experimental::prepend_t<CompletionToken, Values...>, Signature>
-  : async_result<CompletionToken,
-      typename experimental::detail::prepend_signature<
-        Signature, Values...>::type>
+    consign_t<CompletionToken, Values...>, Signatures...>
+  : async_result<CompletionToken, Signatures...>
 {
-  typedef typename experimental::detail::prepend_signature<
-      Signature, Values...>::type signature;
-
   template <typename Initiation>
   struct init_wrapper
   {
@@ -163,7 +139,7 @@ struct async_result<
         ASIO_MOVE_ARG(Args)... args)
     {
       ASIO_MOVE_CAST(Initiation)(initiation_)(
-          experimental::detail::prepend_handler<
+          detail::consign_handler<
             typename decay<Handler>::type, Values...>(
               ASIO_MOVE_CAST(Handler)(handler),
               ASIO_MOVE_CAST(std::tuple<Values...>)(values)),
@@ -174,8 +150,8 @@ struct async_result<
   };
 
   template <typename Initiation, typename RawCompletionToken, typename... Args>
-  static ASIO_INITFN_DEDUCED_RESULT_TYPE(CompletionToken, signature,
-      (async_initiate<CompletionToken, signature>(
+  static ASIO_INITFN_DEDUCED_RESULT_TYPE(CompletionToken, Signatures...,
+      (async_initiate<CompletionToken, Signatures...>(
         declval<init_wrapper<typename decay<Initiation>::type> >(),
         declval<CompletionToken&>(),
         declval<std::tuple<Values...> >(),
@@ -185,7 +161,7 @@ struct async_result<
       ASIO_MOVE_ARG(RawCompletionToken) token,
       ASIO_MOVE_ARG(Args)... args)
   {
-    return async_initiate<CompletionToken, signature>(
+    return async_initiate<CompletionToken, Signatures...>(
         init_wrapper<typename decay<Initiation>::type>(
           ASIO_MOVE_CAST(Initiation)(initiation)),
         token.token_,
@@ -197,12 +173,21 @@ struct async_result<
 template <template <typename, typename> class Associator,
     typename Handler, typename... Values, typename DefaultCandidate>
 struct associator<Associator,
-    experimental::detail::prepend_handler<Handler, Values...>, DefaultCandidate>
+    detail::consign_handler<Handler, Values...>, DefaultCandidate>
   : Associator<Handler, DefaultCandidate>
 {
-  static typename Associator<Handler, DefaultCandidate>::type get(
-      const experimental::detail::prepend_handler<Handler, Values...>& h,
-      const DefaultCandidate& c = DefaultCandidate()) ASIO_NOEXCEPT
+  static typename Associator<Handler, DefaultCandidate>::type
+  get(const detail::consign_handler<Handler, Values...>& h) ASIO_NOEXCEPT
+  {
+    return Associator<Handler, DefaultCandidate>::get(h.handler_);
+  }
+
+  static ASIO_AUTO_RETURN_TYPE_PREFIX2(
+      typename Associator<Handler, DefaultCandidate>::type)
+  get(const detail::consign_handler<Handler, Values...>& h,
+      const DefaultCandidate& c) ASIO_NOEXCEPT
+    ASIO_AUTO_RETURN_TYPE_SUFFIX((
+      Associator<Handler, DefaultCandidate>::get(h.handler_, c)))
   {
     return Associator<Handler, DefaultCandidate>::get(h.handler_, c);
   }
@@ -214,4 +199,4 @@ struct associator<Associator,
 
 #include "asio/detail/pop_options.hpp"
 
-#endif // ASIO_IMPL_EXPERIMENTAL_PREPEND_HPP
+#endif // ASIO_IMPL_CONSIGN_HPP
