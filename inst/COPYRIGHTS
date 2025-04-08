@@ -64,3 +64,18 @@ Files inst/include/asio/ip/network_v4.hpp:
 Files inst/include/asio/ip/network_v6.hpp:
 Copyright: 2014 Oliver Kowalke (oliver dot kowalke at gmail dot com)
 License: BSL-1.0
+
+Files inst/include/asio/experimental/coro.hpp:
+Files inst/include/asio/experimental/coro_traits.hpp:
+Files inst/include/asio/experimental/promise.hpp:
+Files inst/include/asio/experimental/use_promise.hpp:
+Files inst/include/asio/experimental/use_coro.hpp:
+Files inst/include/asio/experimental/detail/coro_completion_handler.hpp:
+Files inst/include/asio/experimental/detail/coro_promise_allocator.hpp:
+Files inst/include/asio/experimental/detail/partial_promise.hpp:
+Files inst/include/asio/experimental/impl/coro.hpp:
+Files inst/include/asio/experimental/impl/promise.hpp:
+Files inst/include/asio/experimental/impl/use_coro.hpp:
+Files inst/include/asio/experimental/impl/use_promise.hpp:
+Copyright: 2021-2023 Klemens D. Morgenstern (klemens dot morgenstern at gmx dot net)
+License: BSL-1.0
