@@ -1,0 +1,26 @@
+From 07767a029b7bc33a6c9e47cf4de1a426244d6798 Mon Sep 17 00:00:00 2001
+From: shikokuchuo <53399081+shikokuchuo@users.noreply.github.com>
+Date: Tue, 8 Apr 2025 14:47:26 +0100
+Subject: [PATCH] Patch for asio/detail/config.hpp to define ASIO_HAS_SNPRINTF
+
+---
+ inst/include/asio/detail/config.hpp | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/inst/include/asio/detail/config.hpp b/inst/include/asio/detail/config.hpp
+index fea8cb8..3367c91 100644
+--- a/inst/include/asio/detail/config.hpp
++++ b/inst/include/asio/detail/config.hpp
+@@ -2319,11 +2319,7 @@
+ // Standard library support for snprintf.
+ #if !defined(ASIO_HAS_SNPRINTF)
+ # if !defined(ASIO_DISABLE_SNPRINTF)
+-#  if defined(__apple_build_version__)
+-#    if (__clang_major__ >= 14)
+-#     define ASIO_HAS_SNPRINTF 1
+-#    endif // (__clang_major__ >= 14)
+-#  endif // defined(__apple_build_version__)
++#   define ASIO_HAS_SNPRINTF 1
+ # endif // !defined(ASIO_DISABLE_SNPRINTF)
+ #endif // !defined(ASIO_HAS_SNPRINTF)
+ 
