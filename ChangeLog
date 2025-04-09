@@ -1,7 +1,11 @@
+2025-04-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Relase 1.28.2-1
+
 2025-04-08  Charlie Gao  <charlie.gao@shikokuchuo.net>
 
 	* inst/include/asio*: Upgraded to Asio 1.28.2
-	* inst/include/asio/detail/config.cpp: Ensure ASIO_HAS_SNPRINTF is defined
+	* inst/include/asio/detail/config.cpp: Ensure ASIO_HAS_SNPRINTF defined
 
 2024-12-17  Dirk Eddelbuettel  <edd@debian.org>
 
