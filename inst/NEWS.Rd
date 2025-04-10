@@ -3,6 +3,13 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/asioheaders/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/asioheaders/issues/#1}{##1}}
 
+\section{Changes in version 1.30.2-0 (2025-04-10}{
+  \itemize{
+    \item Pre-release
+    \item Upgraded to Asio 1.30.2 (Dirk in \ghpr{13} fixing \ghit{12})
+  }
+}
+
 \section{Changes in version 1.28.2-1 (2025-04-08)}{
   \itemize{
     \item Standard maintenance to CI and other packaging aspects
