@@ -5,6 +5,8 @@
 	* inst/include/asio*: Upgraded to Asio 1.30.2
 	* inst/include/asio/detail/config.hpp (ASIO_HAS_SNPRINTF): Reapplied patch
 
+	* README.md: Add badges for r-universe version and dependencies
+
 2025-04-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Relase 1.28.2-1

@@ -3,6 +3,8 @@
 [![CI](https://github.com/eddelbuettel/asioheaders/workflows/ci/badge.svg)](https://github.com/eddelbuettel/asioheaders/actions?query=workflow%3Aci)
 [![License](https://img.shields.io/badge/license-BSL--1.0-brightgreen.svg?style=flat)](https://www.boost.org/users/license.html)
 [![CRAN](https://www.r-pkg.org/badges/version/AsioHeaders)](https://cran.r-project.org/package=AsioHeaders)
+[![r-universe](https://eddelbuettel.r-universe.dev/badges/AsioHeaders)](https://eddelbuettel.r-universe.dev/AsioHeaders)
+[![Dependencies](https://tinyverse.netlify.app/badge/AsioHeaders)](https://cran.r-project.org/package=AsioHeaders)
 [![Downloads](https://cranlogs.r-pkg.org/badges/AsioHeaders?color=brightgreen)](https://cran.r-project.org/package=AsioHeaders)
 [![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/asioheaders)](https://github.com/eddelbuettel/asioheaders)
 
