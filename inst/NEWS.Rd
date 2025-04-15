@@ -3,10 +3,10 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/asioheaders/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/asioheaders/issues/#1}{##1}}
 
-\section{Changes in version 1.30.2-0 (2025-04-10}{
+\section{Changes in version 1.30.2-0 (2025-04-15}{
   \itemize{
-    \item Pre-release
     \item Upgraded to Asio 1.30.2 (Dirk in \ghpr{13} fixing \ghit{12})
+    \item Add two new badges to README.md
   }
 }
 

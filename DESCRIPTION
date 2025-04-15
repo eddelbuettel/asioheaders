@@ -1,8 +1,8 @@
 Package: AsioHeaders
 Type: Package
 Title: 'Asio' C++ Header Files
-Version: 1.30.2-0
-Date: 2025-04-10
+Version: 1.30.2-1
+Date: 2025-04-15
 Authors@R: c(person("Dirk", "Eddelbuettel", role = c("aut", "cre"), email = "edd@debian.org",
                     comment = c(ORCID = "0000-0001-6419-907X")),
              person("Christopher M.", "Kohlhoff", role = "aut",
