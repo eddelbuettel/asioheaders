@@ -6,7 +6,7 @@
 \section{Changes in version 1.30.2-0 (2025-04-15}{
   \itemize{
     \item Upgraded to Asio 1.30.2 (Dirk in \ghpr{13} fixing \ghit{12})
-    \item Add two new badges to README.md
+    \item Added two new badges to README.md
   }
 }
 
