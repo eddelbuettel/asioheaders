@@ -1,6 +1,7 @@
 2026-07-27  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/include/asio*: Upgraded to Asio 1.38.4
+	* inst/include/asio/detail/config.cpp: Ensure ASIO_HAS_SNPRINTF defined
 
 2026-07-15  Dirk Eddelbuettel  <edd@debian.org>
 
